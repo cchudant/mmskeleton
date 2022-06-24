@@ -39,23 +39,29 @@ def test(model_cfg,
     model = MMDataParallel(model, device_ids=range(gpus)).cuda()
     model.eval()
 
-    results = []
-    labels = []
-    prog_bar = ProgressBar(len(dataset))
     for data, label in data_loader:
-        with torch.no_grad():
-            output = model(data)
-            output = model(data).data.cpu().numpy()
+        print(data, label)
 
-        results.append(output)
-        labels.append(label)
-        for i in range(len(data)):
-            prog_bar.update()
-    results = np.concatenate(results)
-    labels = np.concatenate(labels)
+    # img = torch.ones((1, 3, 300, 17))
+    # torch.onnx.export(model, img, './action.onnx', verbose=False, opset_version=12, input_names=['images'], output_names=['output'])
 
-    print('Top 1: {:.2f}%'.format(100 * topk_accuracy(results, labels, 1)))
-    print('Top 5: {:.2f}%'.format(100 * topk_accuracy(results, labels, 5)))
+    # results = []
+    # labels = []
+    # prog_bar = ProgressBar(len(dataset))
+    # for data, label in data_loader:
+    #     with torch.no_grad():
+    #         output = model(data)
+    #         output = model(data).data.cpu().numpy()
+
+    #     results.append(output)
+    #     labels.append(label)
+    #     for i in range(len(data)):
+    #         prog_bar.update()
+    # results = np.concatenate(results)
+    # labels = np.concatenate(labels)
+
+    # print('Top 1: {:.2f}%'.format(100 * topk_accuracy(results, labels, 1)))
+    # print('Top 5: {:.2f}%'.format(100 * topk_accuracy(results, labels, 5)))
 
 
 def train(
